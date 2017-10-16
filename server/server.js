@@ -1,24 +1,68 @@
-// Wymagane biblioteki
+"use strict";
+// Required libraries
 const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const body = require('body-parser');
+const path = require('path');
 
-// Konfiguracja serwera
+// Working directory var
+const __dirpath = path.resolve();
+
+// Path to client directory
+let servdir = path.dirname(__dirpath);
+let clientdir = `${servdir}/client/`
+
+// Body-parser configuration
+app.use(body.urlencoded({extended: true}));
+
+// Server configuration
 let port = 3000;
 
-// Dostęp do bazy danych
+// DB access
 const uberConfig = require('./uberConfig.js');
 let connection = mysql.createConnection(uberConfig);
 
-mysql.connect();
+connection.connect();
 
-mysql.query('SELECT * FROM users')
-
-app.get('/', (req, res) => {
-  res.send('Test');
+connection.query('SELECT * FROM users', (err, rows, fields) => {
+    if (err) throw err
+    console.log(`Data from server ${fields}`);
+    console.table(rows);
 })
+
+connection.end();
+
+app.get('/', function(req, res) {
+  res.sendFile(clientdir+'index.html')
+})
+
+app.get('/api/todos', function(req, res) {
+  res.status(200).send(todos)
+  // Todo.find({}, function(err, todos) {
+  //   res.status(200).send(todos);
+  // })
+})
+
+app.get('/api/todos/:id', function(req, res) {
+  res.status(200).send(todos.find(function(todo){
+    return todo.id == req.params.id
+  }))
+  // Todo.find({_id: req.params.id}, function(err, todos) {
+  //   res.status(200).send(todos);
+  // })
+})
+
+
+
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`App listening on ${port}`);
+  console.log(clientdir);
 })
