@@ -23,11 +23,15 @@ let port = 3000;
 const uberConfig = require('./uberConfig.js');
 let connection = mysql.createConnection(uberConfig);
 
+// Temporary variables
+let tmptables;
+
 connection.connect();
 
 connection.query('SELECT * FROM users', (err, rows, fields) => {
     if (err) throw err
     console.log(`Data from server ${fields}`);
+    tmptables = rows;
     console.table(rows);
 })
 
@@ -37,11 +41,15 @@ app.get('/', function(req, res) {
   res.sendFile(clientdir+'index.html')
 })
 
-app.get('/api/todos', function(req, res) {
-  res.status(200).send(todos)
+app.get('/api/table', function(req, res) {
+  res.status(200).send(tmptables)
+    
+    
   // Todo.find({}, function(err, todos) {
   //   res.status(200).send(todos);
   // })
+    
+    
 })
 
 app.get('/api/todos/:id', function(req, res) {
