@@ -6,11 +6,11 @@ const mysql = require('mysql');
 const body = require('body-parser');
 const path = require('path');
 
-// Working directory var
+// Working directory path
 const __dirpath = path.resolve();
 
 // Path to client directory
-let servdir = path.dirname(__dirpath);
+let servdir = path.dirname(__dirname);
 let clientdir = `${servdir}/client/`
 
 // Body-parser configuration
@@ -26,6 +26,9 @@ let connection = mysql.createConnection(uberConfig);
 // Temporary variables
 let tmptables;
 
+// Static files
+app.use(express.static(path.join(__dirname+'/../', 'client')));
+
 connection.connect();
 
 connection.query('SELECT * FROM users', (err, rows, fields) => {
@@ -37,19 +40,19 @@ connection.query('SELECT * FROM users', (err, rows, fields) => {
 
 connection.end();
 
-app.get('/', function(req, res) {
-  res.sendFile(clientdir+'index.html')
-})
+// app.get('/', (req, res) => {
+//   res.sendFile(clientdir+'index.html')
+// })
 
 app.get('/api/table', function(req, res) {
   res.status(200).send(tmptables)
-    
-    
+
+
   // Todo.find({}, function(err, todos) {
   //   res.status(200).send(todos);
   // })
-    
-    
+
+
 })
 
 app.get('/api/todos/:id', function(req, res) {
