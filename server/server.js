@@ -2,9 +2,10 @@
 // Required libraries
 const express = require('express');
 const app = express();
-const mysql = require('mysql');
 const body = require('body-parser');
 const path = require('path');
+
+const dbConnect = require('DatabaseConnection/dbConnect.js');
 
 // Working directory path
 const __dirpath = path.resolve();
@@ -19,26 +20,11 @@ app.use(body.urlencoded({extended: true}));
 // Server configuration
 let port = 3000;
 
-// DB access
-const uberConfig = require('./uberConfig.js');
-let connection = mysql.createConnection(uberConfig);
-
 // Temporary variables
 let tmptables;
 
 // Static files
 app.use(express.static(path.join(__dirname+'/../', 'client')));
-
-connection.connect();
-
-connection.query('SELECT * FROM users', (err, rows, fields) => {
-    if (err) throw err
-    console.log(`Data from server ${fields}`);
-    tmptables = rows;
-    console.table(rows);
-})
-
-connection.end();
 
 // app.get('/', (req, res) => {
 //   res.sendFile(clientdir+'index.html')
