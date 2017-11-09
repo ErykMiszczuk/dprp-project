@@ -9,9 +9,11 @@
   "author": "Eryk Miszczuk",
   "license": "Beerware",
   "dependencies": {
+    "await": "^0.2.6",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
-    "mysql": "^2.15.0"
+    "mysql": "^2.15.0",
+    "mysql2": "^1.4.2"
   },
   "devDependencies": {
     "nodemon": "^1.12.1"

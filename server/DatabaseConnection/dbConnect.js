@@ -1,16 +1,15 @@
-const mysql = require('mysql');
+const mysql = require('mysql2');
 
 // DB access
 const uberConfig = require('./uberConfig.js');
-let connection = mysql.createConnection(uberConfig);
 
 async function con() {
+    let connection = await mysql.createConnection(uberConfig);
     connection.connect();
     
-    let acc;
-    connection.query('SELECT * FROM users', (err, result, fields) => {
+    let [result, fields] = await connection.query('SELECT * FROM users', (err, result, fields) => {
         if (err) throw err
-        acc = result;
+        // acc = result;
         // console.log(`Data from server ${result.length}`);
         // for(let i = 0; i < result.length; i++) {
         //     acc = acc + JSON.stringify(result[i]);
