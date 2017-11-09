@@ -5,7 +5,7 @@ const app = express();
 const body = require('body-parser');
 const path = require('path');
 
-const dbConnect = require('DatabaseConnection/dbConnect.js');
+const dbConnect = require('./DatabaseConnection/dbConnect.js');
 
 // Working directory path
 const __dirpath = path.resolve();
@@ -26,29 +26,49 @@ let tmptables;
 // Static files
 app.use(express.static(path.join(__dirname+'/../', 'client')));
 
+app.get('/api/table', function(req, res) {
+  tmptables = dbConnect();
+  if(tmptables == null || tmptables == undefined) console.error(`Nie dostarczono danych do klienta ${tmptables}`);
+  // res.sendFile(tmptables)
+  res.status(200).send(JSON.stringify(tmptables));
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // app.get('/', (req, res) => {
 //   res.sendFile(clientdir+'index.html')
 // })
 
-app.get('/api/table', function(req, res) {
-  res.status(200).send(tmptables)
-
-
-  // Todo.find({}, function(err, todos) {
-  //   res.status(200).send(todos);
-  // })
-
-
-})
-
-app.get('/api/todos/:id', function(req, res) {
-  res.status(200).send(todos.find(function(todo){
-    return todo.id == req.params.id
-  }))
-  // Todo.find({_id: req.params.id}, function(err, todos) {
-  //   res.status(200).send(todos);
-  // })
-})
+// app.get('/api/todos/:id', function(req, res) {
+//   res.status(200).send(todos.find(function(todo){
+//     return todo.id == req.params.id
+//   }))
+//   Todo.find({_id: req.params.id}, function(err, todos) {
+//     res.status(200).send(todos);
+//   })
+// })
 
 
 
