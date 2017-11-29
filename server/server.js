@@ -8,6 +8,9 @@ const await = require('await');
 
 const dbConnect = require('./DatabaseConnection/dbConnect.js');
 
+const con = new dbConnect();
+con.connectionTest();
+
 // Working directory path
 const __dirpath = path.resolve();
 
