@@ -10,7 +10,16 @@ const OperatorModel = require('../DataModels/Operator.js');
 const IndustryModel = require('../DataModels/Industry.js');
 const ClientModel = require('../DataModels/Client.js');
 
+/**
+ * Provide database manipulation API to server
+ * 
+ * @class DBConnect
+ */
 class DBConnect {
+  /**
+   * Create instance of DBConnect
+   * @memberof DBConnect
+   */
   constructor() {
     this.orm = new Sequelize('dprp-project', 'root', '',{
       host: 'localhost',
@@ -25,8 +34,12 @@ class DBConnect {
   
     });
   }
-
-  connectionTest() {
+/**
+ *  Function that test connection to database
+ * 
+ * @memberof DBConnect
+ */
+connectionTest() {
     this.orm
     .authenticate()
     .then(() => {
@@ -38,4 +51,5 @@ class DBConnect {
   }
 }
 
+// Exported objects
 module.exports = DBConnect;
