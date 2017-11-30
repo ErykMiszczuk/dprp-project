@@ -1,32 +1,31 @@
 "use strict";
-const Operator = sequelize.define('operator', {
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('operator', {
   id: {
-    type: Sequelize.INTEGER, allowNull: false, autoIncrement: true,
+    type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true
   },
   firstName: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
   lastName: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
   email: {
-    type: Sequelize.STRING, validate: {isEmail: true}
+    type: DataTypes.STRING, validate: {isEmail: true}
   },
   phoneNumber: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
   position: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
-  clientId: {
-    type: Sequelize.INTEGER, allowNull: false, references: {model: 'Client', key: 'id'}
-  },
-  userId: {
-    type: Sequelize.INTEGER, allowNull: false, references: {model: 'User', key: 'id'}
-  },
+  // clientId: {
+  //   type: DataTypes.INTEGER, allowNull: false//, references: {model: 'client' ,key: 'id'}
+  // },
+  // userId: {
+  //   type: DataTypes.INTEGER, allowNull: false//, references: {model: 'user' ,key: 'id'}
+  // },
   isDeleted: {
-    type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false
+    type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
   }
-});
-
-module.exports = Operator;
+})};

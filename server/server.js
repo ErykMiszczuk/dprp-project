@@ -4,12 +4,21 @@ const express = require('express');
 const app = express();
 const body = require('body-parser');
 const path = require('path');
-const await = require('await');
+// const await = require('await');
 
 const dbConnect = require('./DatabaseConnection/dbConnect.js');
 
-const con = new dbConnect();
-con.connectionTest();
+const con = dbConnect;
+//const con = new dbConnect();
+// con.connectionTest();
+con.createTablesStructure() ;
+// con.createUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury')//.then(
+  //res =>
+  //  console.log(`[${new Date().toLocaleString()}] - ${con.createUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury')}`)
+   //,
+  //rej => console.error(`[${new Date().toLocaleString()}] - ${rej}`)
+//);
+
 
 // Working directory path
 const __dirpath = path.resolve();

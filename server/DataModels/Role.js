@@ -1,11 +1,10 @@
 "use strict";
-const Role = sequelize.define('role', {
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('role', {
   id: {
-    type: Sequelize.INTEGER, allowNull: false, autoIncrement: true,
+    type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true
   },
   name: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   }
-});
-
-module.exports = Role;
+})};

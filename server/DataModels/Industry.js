@@ -1,11 +1,10 @@
 "use strict";
-const Industry = sequelize.define('industry', {
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('industry', {
   id: {
-    type: Sequelize.INTEGER, allowNull: false, autoIncrement: true,
+    type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true
   },
   industryType: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   }
-});
-
-module.exports = Industry;
+})};

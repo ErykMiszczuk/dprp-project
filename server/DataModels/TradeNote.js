@@ -1,20 +1,19 @@
 "use strict";
-const User = sequelize.define('user', {
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('tradenote', {
   id: {
-    type: Sequelize.INTEGER, allowNull: false, autoIncrement: true,
+    type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true
   },
   content: {
-    type: Sequelize.TEXT, allowNull: false
+    type: DataTypes.TEXT, allowNull: false
   },
-  clientId: {
-    type: Sequelize.INTEGER, allowNull: false, references: {model: 'Client', key: 'id'}
-  },
-  userId: {
-    type: Sequelize.INTEGER, allowNull: false, references: {model: 'User', key: 'id'}
-  },
+  // clientId: {
+  //   type: DataTypes.INTEGER, allowNull: false, references: {model: ClientModel ,key: 'id'}
+  // },
+  // userId: {
+  //   type: DataTypes.INTEGER, allowNull: false, references: {model: UserModel ,key: 'id'}
+  // },
   isDeleted: {
-    type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false
+    type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
   }
-});
-
-module.exports = User;
+})};

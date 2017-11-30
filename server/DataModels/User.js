@@ -1,29 +1,30 @@
 "use strict";
-const User = sequelize.define('user', {
-  id: {
-    type: Sequelize.INTEGER, autoIncrement: true, allowNull: false
-  },
-  firstName: {
-    type: Sequelize.STRING, allowNull: false
-  },
-  lastName: {
-    type: Sequelize.STRING, allowNull: false
-  },
-  birthDate: {
-    type: Sequelize.DATE, allowNull: false, validate: {isDate: true}
-  },
-  login: {
-    type: Sequelize.STRING, allowNull: false
-  },
-  password: {
-    type: Sequelize.STRING, allowNull: false
-  },
-  roleId: {
-    type: Sequelize.INTEGER, allowNull: false, references: {model: 'Role', key: 'id'}
-  },
-  isDeleted: {
-    type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false
-  }
-});
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('user', {
+    id: {
+      type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true
+    },
+    firstName: {
+      type: DataTypes.STRING, allowNull: false
+    },
+    lastName: {
+      type: DataTypes.STRING, allowNull: false
+    },
+    birthDate: {
+      type: DataTypes.DATEONLY, allowNull: false, validate: {isDate: true}
+    },
+    login: {
+      type: DataTypes.STRING, allowNull: false
+    },
+    password: {
+      type: DataTypes.STRING, allowNull: false
+    },
+    // roleId: {
+    //   type: DataTypes.INTEGER, allowNull: true
+    // },
+    isDeleted: {
+      type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
+    }
+  })
+}
 
-module.exports = User;

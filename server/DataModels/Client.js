@@ -1,29 +1,28 @@
 "use strict";
-const Client = sequelize.define('client', {
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define('client', {
   id: {
-    type: Sequelize.STRING, allowNull: false, autoIncrement: true,
+    type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true
   },
   clientName: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
   nip: {
-    type: Sequelize.STRING, allowNull: false, validate: {isNumeric: true}
+    type: DataTypes.STRING, allowNull: false, validate: {isNumeric: true}
   },
-  industryId: {
-    type: Sequelize.INTEGER, allowNull: false, references: {model: 'Industry', key: 'id'}
-  },
+  // industryId: {
+  //   type: DataTypes.INTEGER, allowNull: false, references: {model: IndustryModel ,key: 'id'}
+  // },
   address: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
   city: {
-    type: Sequelize.STRING, allowNull: false
+    type: DataTypes.STRING, allowNull: false
   },
-  userId: {
-    type: Sequelize.STRING, allowNull: false, references: {model: 'User', key: 'id'}
-  },
+  // userId: {
+  //   type: DataTypes.INTEGER, allowNull: false, references: {model: UserModel ,key: 'id'}
+  // },
   isDeleted: {
-    type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false
+    type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
   }
-});
-
-module.exports = Client;
+})};
