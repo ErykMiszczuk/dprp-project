@@ -49,32 +49,32 @@ class DBConnect {
  */
   static createUser(first_name, last_name, birth_date, usr_login, passwd) {
     UserModel
-      .findOrCreate({
-        where: [
-          {firstName: first_name}, 
-            {lastName: last_name},
-            {birthDate: birth_date},
-            {login: usr_login},
-            {password: passwd}
-        ],
-        defaults: [
-          {firstName: first_name},
-          {lastName: last_name},
-          {birthDate: birth_date},
-          {login: usr_login},
-          {password: passwd}
-        ],
-        }
-      // .create({
-      //   firstName: first_name,
-      //   lastName: last_name,
-      //   birthDate: birth_date,
-      //   login: usr_login,
-      //   password: passwd
-      // })
+      // .findOrCreate({
+      //   where: [
+      //     {firstName: first_name}, 
+      //       {lastName: last_name},
+      //       {birthDate: birth_date},
+      //       {login: usr_login},
+      //       {password: passwd}
+      //   ],
+      //   defaults: [
+      //     {firstName: first_name},
+      //     {lastName: last_name},
+      //     {birthDate: birth_date},
+      //     {login: usr_login},
+      //     {password: passwd}
+      //   ],
+      //   }
+      .create({
+        firstName: first_name,
+        lastName: last_name,
+        birthDate: birth_date,
+        login: usr_login,
+        password: passwd
+      })
     // }
       // )
-    )
+    // )
     console.log(`[${new Date().toLocaleString()}] - User created.`);
     }
 /**
