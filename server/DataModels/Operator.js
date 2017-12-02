@@ -19,12 +19,6 @@ module.exports = (sequelize, DataTypes) => {
   position: {
     type: DataTypes.STRING, allowNull: false
   },
-  // clientId: {
-  //   type: DataTypes.INTEGER, allowNull: false//, references: {model: 'client' ,key: 'id'}
-  // },
-  // userId: {
-  //   type: DataTypes.INTEGER, allowNull: false//, references: {model: 'user' ,key: 'id'}
-  // },
   isDeleted: {
     type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
   }

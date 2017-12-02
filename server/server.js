@@ -37,7 +37,7 @@ app.get('/api/table', function(req, res) {
 })
   
 app.get('/api/install', function(req, res) {
-  con.createTablesStructure();
+  con.createTablesStructure(true, false);
   res.status(200).send('Create tables');
 })
 
