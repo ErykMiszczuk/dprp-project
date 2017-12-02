@@ -37,7 +37,7 @@ app.get('/api/table', function(req, res) {
 })
   
 app.get('/api/install', function(req, res) {
-  con.createTablesStructure(true, false);
+  con.createTablesStructure(false, true);
   res.status(200).send('Create tables');
 })
 
@@ -46,7 +46,10 @@ app.get('/api/adduser', function(req, res) {
   res.status(200).send('Add user');
 })
 
-
+app.get('/api/finduser', function(req, res) {
+  con.findUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury');
+  res.status(200).send('Add user');
+})
 
 
 

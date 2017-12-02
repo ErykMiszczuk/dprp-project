@@ -26,12 +26,12 @@ const sequelize = new Sequelize(uberConfig.database, uberConfig.user, uberConfig
 });
 
 //Data models
-const UserModel = sequelize.import(__dirname + '/../DataModels/User.js')
-const RoleModel = sequelize.import(__dirname + '/../DataModels/Role.js');
-const OperatorModel = sequelize.import(__dirname + '/../DataModels/Operator.js');
-const IndustryModel = sequelize.import(__dirname + '/../DataModels/Industry.js');
-const ClientModel = sequelize.import(__dirname + '/../DataModels/Client.js');
-const TradeNoteModel = sequelize.import(__dirname + '/../DataModels/TradeNote.js');
+const UserModel = sequelize.import(__dirname + '/../models/users.js')
+const RoleModel = sequelize.import(__dirname + '/../models/roles.js');
+const OperatorModel = sequelize.import(__dirname + '/../models/operators.js');
+const IndustryModel = sequelize.import(__dirname + '/../models/industries.js');
+const ClientModel = sequelize.import(__dirname + '/../models/clients.js');
+const TradeNoteModel = sequelize.import(__dirname + '/../models/tradenotes.js');
 
 /**
  * Provide database manipulation API to server
@@ -52,14 +52,38 @@ class DBConnect {
  * @memberof DBConnect
  */
   static createUser(first_name, last_name, birth_date, usr_login, passwd) {
+    // UserModel
+    //   .find({
+    //   where: {login: usr_login
+    //   }}).then(
+    //     user => {
+    //       if (user === null) {
+    //         UserModel
+    //         .create({
+    //           firstName: first_name,
+    //           lastName: last_name,
+    //           birthDate: birth_date,
+    //           login: usr_login,
+    //           password: passwd
+    //         });
+    //       }
+    //     }
+    //   )
     UserModel
-      .find({
-      where: {
-        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
-      }
-      }).then(
-        user => console.log(user)
-      )
+    .findOrCreate({
+      where: {login: usr_login},
+      defaults: {firstName: first_name,
+      lastName: last_name,
+      birthDate: birth_date,
+      password: passwd}
+    })
+    .spread((user, created) => {
+      console.log(user.get({
+        plain: true
+      }))
+      console.log(created)
+    }
+    )
       // .then(
       //   res => console.log(`[${new Date().toLocaleString()}] - User created.`),
       //   rej =>
@@ -71,21 +95,20 @@ class DBConnect {
       //     password: passwd
       //   })
       // );
-    // UserModel
-    //   .create({
-    //     firstName: first_name,
-    //     lastName: last_name,
-    //     birthDate: birth_date,
-    //     login: usr_login,
-    //     password: passwd
-    //   });
+    
     //console.log(`[${new Date().toLocaleString()}] - User created.`);
     }
-
-
-    static createTradeNote(text) {
-      TradeNoteModel
-        .create
+    
+    static findUser(first_name, last_name, birth_date, usr_login, passwd) {
+      UserModel
+      .find({
+      where: {
+        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
+      },
+      include: [{model: RoleModel}]
+      }).then(
+        user => console.log(user)
+      )
     }
 /**
  * CREATE TABLE based on models defined in DataModels
@@ -94,12 +117,12 @@ class DBConnect {
  * @param {boolean} alter 
  * @memberof DBConnect
  */
- static createTablesStructure(alter, force) {
+  static createTablesStructure(alter, force) {
+    this.createRelations();
     sequelize.sync({alter: alter, force: force})
     .then(
         res => {
           console.log(`[${new Date().toLocaleString()}] - Tables created.`);
-          this.createRelations();
           console.log(`[${new Date().toLocaleString()}] - Relations created.`);
           this.createRoles();
           console.log(`[${new Date().toLocaleString()}] - Roles created.`);
