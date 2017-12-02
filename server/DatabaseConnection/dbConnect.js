@@ -43,32 +43,15 @@ class DBConnect {
  * Create new user in database, or return information that user exist in
  * database, useful for login
  * 
+ * @static 
  * @param {string} first_name 
  * @param {string} last_name 
  * @param {string} birth_date 
  * @param {string} usr_login 
  * @param {string} passwd
- * @static 
  * @memberof DBConnect
  */
   static createUser(first_name, last_name, birth_date, usr_login, passwd) {
-    // UserModel
-    //   .find({
-    //   where: {login: usr_login
-    //   }}).then(
-    //     user => {
-    //       if (user === null) {
-    //         UserModel
-    //         .create({
-    //           firstName: first_name,
-    //           lastName: last_name,
-    //           birthDate: birth_date,
-    //           login: usr_login,
-    //           password: passwd
-    //         });
-    //       }
-    //     }
-    //   )
     UserModel
     .findOrCreate({
       where: {login: usr_login},
@@ -82,24 +65,22 @@ class DBConnect {
         plain: true
       }))
       console.log(created)
-    }
+      }
     )
-      // .then(
-      //   res => console.log(`[${new Date().toLocaleString()}] - User created.`),
-      //   rej =>
-      //    this.create({
-      //     firstName: first_name,
-      //     lastName: last_name,
-      //     birthDate: birth_date,
-      //     login: usr_login,
-      //     password: passwd
-      //   })
-      // );
-    
-    //console.log(`[${new Date().toLocaleString()}] - User created.`);
-    }
-    
-    static findUser(first_name, last_name, birth_date, usr_login, passwd) {
+  }
+
+/**
+ * Find user by his atributes
+ * 
+ * @static
+ * @param {string} first_name 
+ * @param {string} last_name 
+ * @param {string} birth_date 
+ * @param {string} usr_login 
+ * @param {string} passwd
+ * @memberof DBConnect
+ */
+  static findUser(first_name, last_name, birth_date, usr_login, passwd) {
       UserModel
       .find({
       where: {
