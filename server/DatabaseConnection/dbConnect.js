@@ -39,18 +39,18 @@ const TradeNoteModel = sequelize.import(__dirname + '/../models/tradenotes.js');
  * @class DBConnect
  */
 class DBConnect {
-/**
- * Create new user in database, or return information that user exist in
- * database, useful for login
- * 
- * @static 
- * @param {string} first_name 
- * @param {string} last_name 
- * @param {string} birth_date 
- * @param {string} usr_login 
- * @param {string} passwd
- * @memberof DBConnect
- */
+  /**
+   * Create new user in database, or return information that user exist in
+   * database, useful for login
+   * 
+   * @static 
+   * @param {string} first_name 
+   * @param {string} last_name 
+   * @param {string} birth_date 
+   * @param {string} usr_login 
+   * @param {string} passwd
+   * @memberof DBConnect
+   */
   static createUser(first_name, last_name, birth_date, usr_login, passwd) {
     UserModel
     .findOrCreate({
@@ -69,18 +69,17 @@ class DBConnect {
     )
   }
 
-/**
- * Find user by his atributes
- * 
- * @static
- * @param {string} first_name 
- * @param {string} last_name 
- * @param {string} birth_date 
- * @param {string} usr_login 
- * @param {string} passwd
- * @memberof DBConnect
- */
-  static findUser(first_name, last_name, birth_date, usr_login, passwd) {
+  /**
+   * Find user by his atributes
+   * 
+   * @static
+   * @param {string} first_name 
+   * @param {string} last_name 
+   * @param {string} birth_date 
+   * @param {string} usr_login 
+   * @memberof DBConnect
+   */
+  static findUser(first_name, last_name, birth_date, usr_login) {
       UserModel
       .find({
       where: {
@@ -91,13 +90,27 @@ class DBConnect {
         user => console.log(user)
       )
     }
-/**
- * CREATE TABLE based on models defined in DataModels
- * 
- * @static
- * @param {boolean} alter 
- * @memberof DBConnect
- */
+
+  /**
+   * Get all available users
+   * 
+   * @static
+   * @memberof DBConnect
+   */
+  static getUsers() {
+    UserModel.findAll()
+    .then(
+      users => console.info(`[${new Date().toLocaleString()}] - Finded users.`, users)
+    )
+  }
+  
+  /**
+   * CREATE TABLE based on models defined in DataModels
+   * 
+   * @static
+   * @param {boolean} alter 
+   * @memberof DBConnect
+   */
   static createTablesStructure(alter, force) {
     this.createRelations();
     sequelize.sync({alter: alter, force: force})
@@ -112,12 +125,12 @@ class DBConnect {
       )
   }
 
-/**
- *  Function that test connection to database
- * 
- * @static
- * @memberof DBConnect
- */
+  /**
+   *  Function that test connection to database
+   * 
+   * @static
+   * @memberof DBConnect
+   */
   static connectionTest() {
     sequelize
     .authenticate()
@@ -129,13 +142,13 @@ class DBConnect {
     });
   }
 
-/**
- * Create relations beetween models
- * 
- * @static
- * @memberof DBConnect
- */
-static createRelations() {
+  /**
+   * Create relations beetween models
+   * 
+   * @static
+   * @memberof DBConnect
+   */
+    static createRelations() {
     // User model
     RoleModel.hasMany(UserModel);
     UserModel.belongsTo(RoleModel);
@@ -166,13 +179,15 @@ static createRelations() {
         console.log(`[${new Date().toLocaleString()}] - Relations created`);
       })
   }
-/**
- * Create 3 basic roles normal user (digger), moderator (shadow), admin (baron)
- * 
- * @static
- * @memberof DBConnect
- */
-static createRoles() {
+
+  /**
+   * Create 3 basic roles normal user (digger), moderator (shadow),
+   * admin (baron)
+   * 
+   * @static
+   * @memberof DBConnect
+   */
+  static createRoles() {
     RoleModel
       .create({
         name: 'digger'

@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const body = require('body-parser');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 // const await = require('await');
 
 const dbConnect = require('./DatabaseConnection/dbConnect.js');
@@ -28,27 +29,26 @@ let tmptables;
   
 // Static files
 app.use(express.static(path.join(__dirname+'/../', 'client')));
-  
-app.get('/api/table', function(req, res) {
-  tmptables = dbConnect();
-  if(tmptables == null || tmptables == undefined) console.error(`Nie dostarczono danych do klienta ${tmptables}`);
-    // res.sendFile(tmptables)
-  res.status(200).send(JSON.stringify(tmptables));
-})
-  
+
+// Routes
 app.get('/api/install', function(req, res) {
   con.createTablesStructure(false, true);
   res.status(200).send('Create tables');
 })
 
 app.get('/api/adduser', function(req, res) {
-  con.createUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury');
+  con.createUser('Sherlock', 'Holmes', '1981-10-13', 'Holmes', bcrypt.hashSync('Holmes', 7));
   res.status(200).send('Add user');
 })
 
 app.get('/api/finduser', function(req, res) {
-  con.findUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury');
+  con.findUser('Zenek', 'Bury', '1981-10-13', 'Bury');
   res.status(200).send('Add user');
+})
+
+app.get('/api/allusers', function(req, res) {
+  con.getUsers();
+  res.status(200).send('All users');
 })
 
 

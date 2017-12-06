@@ -10,6 +10,7 @@
   "license": "Beerware",
   "dependencies": {
     "await": "^0.2.6",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "moment": "^2.19.3",
