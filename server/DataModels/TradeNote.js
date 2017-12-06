@@ -7,12 +7,6 @@ module.exports = (sequelize, DataTypes) => {
   content: {
     type: DataTypes.TEXT, allowNull: false
   },
-  // clientId: {
-  //   type: DataTypes.INTEGER, allowNull: false, references: {model: ClientModel ,key: 'id'}
-  // },
-  // userId: {
-  //   type: DataTypes.INTEGER, allowNull: false, references: {model: UserModel ,key: 'id'}
-  // },
   isDeleted: {
     type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false
   }
