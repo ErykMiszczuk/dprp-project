@@ -51,6 +51,13 @@ app.get('/api/finduser', function(req, res) {
   res.status(200).send('Add user');
 })
 
+app.get('/api/getUsers', function(req, res) {
+  con.getUsers().then(
+    succes => res.status(200).send(succes),
+    err => res.status(404).send(err),
+  )
+})
+
 
 
 

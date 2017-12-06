@@ -39,6 +39,74 @@ const TradeNoteModel = sequelize.import(__dirname + '/../models/tradenotes.js');
  * @class DBConnect
  */
 class DBConnect {
+
+/**
+ * Get all users
+ * 
+ * @static
+ * @param {any} other 
+ * @returns {Promise}
+ * @memberof DBConnect
+ */
+  static getUsers() {
+    return UserModel.findAll();
+  }
+
+/**
+ * Get all trade notes
+ * 
+ * @static
+ * @returns {Promise} 
+ * @memberof DBConnect
+ */
+  static getTradeNotes() {
+    return TradeNoteModel.findAll();
+  }
+
+/**
+ * Get all roles
+ * 
+ * @static
+ * @returns {Promise} 
+ * @memberof DBConnect
+ */
+  static getRoles() {
+    return RoleModel.findAll();
+  }
+
+/**
+ * Get all operators
+ * 
+ * @static
+ * @returns {Promise}
+ * @memberof DBConnect
+ */
+  static getOperators() {
+    return OperatorModel.findAll();
+  }
+
+/**
+ * Get all industries
+ * 
+ * @static
+ * @returns {Promise} 
+ * @memberof DBConnect
+ */
+  static getIndustries() {
+    return IndustryModel.findAll();
+  }
+
+/**
+ * Get all clients
+ * 
+ * @static
+ * @returns {Promise} 
+ * @memberof DBConnect
+ */
+  static getClients() {
+    return ClientModel.findAll();
+  }
+
 /**
  * Create new user in database, or return information that user exist in
  * database, useful for login
@@ -91,6 +159,18 @@ class DBConnect {
         user => console.log(user)
       )
     }
+
+    static deleteUser(first_name, last_name, birth_date, usr_login, passwd) {
+      UserModel
+      .find({
+      where: {
+        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
+      }
+      }).then(
+        user => user.set()
+      )
+    };
+
 /**
  * CREATE TABLE based on models defined in DataModels
  * 
