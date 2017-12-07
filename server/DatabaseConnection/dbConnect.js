@@ -44,7 +44,6 @@ class DBConnect {
  * Get all users
  * 
  * @static
- * @param {any} other 
  * @returns {Promise}
  * @memberof DBConnect
  */
@@ -120,7 +119,7 @@ class DBConnect {
  * @memberof DBConnect
  */
   static createUser(first_name, last_name, birth_date, usr_login, passwd) {
-    UserModel
+    return UserModel
     .findOrCreate({
       where: {login: usr_login},
       defaults: {firstName: first_name,
@@ -128,13 +127,80 @@ class DBConnect {
       birthDate: birth_date,
       password: passwd}
     })
-    .spread((user, created) => {
-      console.log(user.get({
-        plain: true
-      }))
-      console.log(created)
-      }
-    )
+  }
+
+/**
+ * Create operator
+ * 
+ * @static
+ * @param {String} first_name 
+ * @param {String} last_name 
+ * @param {String} email 
+ * @param {String} phone_number 
+ * @param {String} position 
+ * @returns Promise
+ * @memberof DBConnect
+ */
+  static createOperator(first_name, last_name, email, phone_number, position) {
+    return OperatorModel
+    .findOrCreate({
+      where: {email: email},
+      defaults: {firstName: first_name,
+      lastName: last_name,
+      phoneNumber: phone_number,
+      position: position}
+    })
+  }
+
+/**
+ * Create Client
+ * 
+ * @static
+ * @param {String} client_name 
+ * @param {String} nip 
+ * @param {String} adress 
+ * @param {String} city 
+ * @returns 
+ * @memberof DBConnect
+ */
+  static createClient(client_name, nip, adress, city) {
+    return OperatorModel
+    .findOrCreate({
+      where: {nip: nip},
+      defaults: {clientName: client_name,
+      address: address,
+      city: city}
+    })
+  }
+
+/**
+ * Create a tradenote
+ * 
+ * @static
+ * @param {String} content 
+ * @returns Promise
+ * @memberof DBConnect
+ */
+  static createTradeNote(content) {
+    return TradeNoteModel
+    .findOrCreate({
+      where: {content: content} 
+    })
+  }
+  
+  /**
+   * Create new type of Industry
+   * 
+   * @static
+   * @param {String} industry_type 
+   * @returns {Promise}
+   * @memberof DBConnect
+   */
+  static createIndustryType(industry_type) {
+    return IndustryModel
+    .findOrCreate({
+      where: {industryType: industry_type} 
+    })
   }
 
 /**
@@ -149,27 +215,62 @@ class DBConnect {
  * @memberof DBConnect
  */
   static findUser(first_name, last_name, birth_date, usr_login, passwd) {
-      UserModel
+    return UserModel
       .find({
       where: {
         [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
       },
       include: [{model: RoleModel}]
-      }).then(
-        user => console.log(user)
-      )
+      })
     }
 
-    static deleteUser(first_name, last_name, birth_date, usr_login, passwd) {
-      UserModel
+  static findTradeNote(id) {
+    return TradeNoteModel
+      .findById(id, {
+      include: [{model: RoleModel}]
+      })
+    }
+
+  static findOperator(first_name, last_name, birth_date, usr_login, passwd) {
+    return OperatorModel
       .find({
       where: {
         [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
+      },
+      include: [{model: RoleModel}]
+      })
+    }
+
+  static findUser(first_name, last_name, birth_date, usr_login, passwd) {
+    return UserModel
+      .find({
+      where: {
+        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
+      },
+      include: [{model: RoleModel}]
+      })
+    }
+
+  static findUser(first_name, last_name, birth_date, usr_login, passwd) {
+    return UserModel
+      .find({
+      where: {
+        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
+      },
+      include: [{model: RoleModel}]
+      })
+    }
+
+  static deleteUser(first_name, last_name, birth_date, usr_login, passwd) {
+    UserModel
+    .find({
+      where: {
+        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
       }
-      }).then(
-        user => user.set()
-      )
-    };
+    }).then(
+      user => user.set()
+    )
+  };
 
 /**
  * CREATE TABLE based on models defined in DataModels
@@ -215,7 +316,7 @@ class DBConnect {
  * @static
  * @memberof DBConnect
  */
-static createRelations() {
+  static createRelations() {
     // User model
     RoleModel.hasMany(UserModel);
     UserModel.belongsTo(RoleModel);
@@ -244,15 +345,17 @@ static createRelations() {
     sequelize.sync({alter: true}).then(
       res => {
         console.log(`[${new Date().toLocaleString()}] - Relations created`);
-      })
+      }
+    )
   }
+
 /**
  * Create 3 basic roles normal user (digger), moderator (shadow), admin (baron)
  * 
  * @static
  * @memberof DBConnect
  */
-static createRoles() {
+  static createRoles() {
     RoleModel
       .create({
         name: 'digger'
