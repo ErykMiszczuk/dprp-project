@@ -43,6 +43,56 @@ app.get('/api/install', function(req, res) {
   res.status(200).send('Create tables');
 })
 
+// Authentication
+app.post('/auth', function(req, res) {
+  con.findUser(req.body.login)
+    .then(
+      resolve => {
+        bcrypt.compare(req.body.password, resolve.password, function(err, good) {
+          if (good == true) {
+            const payload = {
+              admin: resolve.admin 
+            };
+            let token = jwt.sign(payload, app.get('superSecret'), {
+              expiresIn: '2 days' // expires in 24 hours
+            });
+            // return the information including token as JSON
+            res.status(200).json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token
+            });
+          }
+          else if (good == false) {
+            res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+          }
+        })
+      },
+    reject => res.status(404).json({success: false, message: 'Authentication failed. User not found.'})
+    )
+})
+
+// Token checking
+app.use(function(req, res, next) {
+    // check header or url parameters or post parameters for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'];
+    if (token) {
+      jwt.verify(token, app.get('superSecret'), function(err, decoded) {      
+        if (err) {
+          return res.json({ success: false, message: 'Failed to authenticate token.' });
+        } else {
+          req.decoded = decoded;
+          next();
+        }
+      });
+    } else {
+      return res.status(403).send({ 
+          success: false, 
+          message: 'No token provided.' 
+      });
+    }
+  });
+
 // Adding tables entries
 app.post('/api/adduser', function(req, res) {
   con.createUser(req.body.name, req.body.lastname, req.body.dateOfBirth, req.body.login, bcrypt.hashSync(req.body.password, 8))
@@ -136,34 +186,6 @@ app.get('/api/getclients', function(req, res) {
     err => res.status(404).send(err)
   )
 });
-
-app.post('/auth', function(req, res) {
-  con.findUser(req.body.login)
-    .then(
-      resolve => {
-        bcrypt.compare(req.body.password, resolve.password, function(err, good) {
-          if (good == true) {
-            const payload = {
-              admin: resolve.admin 
-            };
-            let token = jwt.sign(payload, app.get('superSecret'), {
-              expiresIn: '2 days' // expires in 24 hours
-            });
-            // return the information including token as JSON
-            res.status(200).json({
-              success: true,
-              message: 'Enjoy your token!',
-              token: token
-            });
-          }
-          else if (good == false) {
-            res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-          }
-        })
-      },
-    reject => res.status(404).json({success: false, message: 'Authentication failed. User not found.'})
-    )
-})
 
 /**
  * Starting server
