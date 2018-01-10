@@ -207,21 +207,18 @@ class DBConnect {
  * Find user by his atributes
  * 
  * @static
- * @param {string} first_name 
- * @param {string} last_name 
- * @param {string} birth_date 
  * @param {string} usr_login 
- * @param {string} passwd
  * @memberof DBConnect
  */
-  static findUser(first_name, last_name, birth_date, usr_login, passwd) {
+  static findUser(usr_login) {
     return UserModel
       .find({
-      where: {
-        [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
-      },
-      include: [{model: RoleModel}]
-      })
+      where: {login: usr_login}
+      }
+      // ,{
+      //   include: [{model: RoleModel}]
+      // }
+    )
     }
 
 /**
@@ -269,7 +266,7 @@ class DBConnect {
  * @returns 
  * @memberof DBConnect
  */
-static findUser(client_name, nip, adress, city) {
+static findClient(client_name, nip, adress, city) {
     return ClientModel
       .find({
       where: {

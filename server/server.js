@@ -4,8 +4,9 @@ const express = require('express');
 const app = express();
 const body = require('body-parser');
 const path = require('path');
+const morgan = require('morgan');
 const bcrypt = require('bcryptjs');
-// const await = require('await');
+const jwt = require('jsonwebtoken');
 
 const dbConnect = require('./DatabaseConnection/dbConnect.js');
 
@@ -20,10 +21,15 @@ let clientdir = `${servdir}/client/`
   
 // Body-parser configuration
 app.use(body.urlencoded({extended: true}));
+app.use(body.json());
+
+//Loging middleware
+app.use(morgan('dev'));
  
 // Server configuration
 let port = 3000;
-  
+app.set('superSecret', 'superSecret');
+
 // Temporary variables
 let tmptables;
   
@@ -38,40 +44,40 @@ app.get('/api/install', function(req, res) {
 })
 
 // Adding tables entries
-app.get('/api/adduser', function(req, res) {
-  con.createUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury')
+app.post('/api/adduser', function(req, res) {
+  con.createUser(req.body.name, req.body.lastname, req.body.dateOfBirth, req.body.login, bcrypt.hashSync(req.body.password, 8))
     .then(
       succes => res.status(200).send(succes),
       err => res.status(404).send(err)
     )
 });
 
-app.get('/api/addnote', function(req, res) {
-  con.createTradeNote('Taka tam notka')
+app.post('/api/addnote', function(req, res) {
+  con.createTradeNote(req.body.note)
     .then(
       succes => res.status(200).send(succes),
       err => res.status(404).send(err)
     )
 });
 
-app.get('/api/addoperator', function(req, res) {
-  con.createOperator('Diego', 'Gonzales', 'diego@oldcamp.com', '996622456', 'Cień')
+app.post('/api/addoperator', function(req, res) {
+  con.createOperator(req.body.name, req.body.lastname, req.body.email, req.body.number, req.body.position)
     .then(
       succes => res.status(200).send(succes),
       err => res.status(404).send(err)
     )
 });
 
-app.get('/api/addindustry', function(req, res) {
-  con.createIndustryType('Kopalnia')
+app.post('/api/addindustry', function(req, res) {
+  con.createIndustryType(req.body.industryType)
     .then(
       succes => res.status(200).send(succes),
       err => res.status(404).send(err)
     )
 });
 
-app.get('/api/addclient', function(req, res) {
-  con.createClient('Old Camp Mine', '456763', 'Zamkowa', 'Khorinis')
+app.post('/api/addclient', function(req, res) {
+  con.createClient(req.body.clientName, req.body.nip, req.body.adress, req.body.city)
     .then(
       succes => res.status(200).send(succes),
       err => res.status(404).send(err)
@@ -79,8 +85,8 @@ app.get('/api/addclient', function(req, res) {
 });
 
 // Find elements in table
-app.get('/api/finduser', function(req, res) {
-  con.findUser('Zenek', 'Bury', '1981-10-13', 'Bury', 'Bury')
+app.post('/api/finduser', function(req, res) {
+  con.findUser('Bury')
     .then(
       succes => res.status(200).send(succes),
       err => res.status(404).send(err)
@@ -131,7 +137,59 @@ app.get('/api/getclients', function(req, res) {
   )
 });
 
+app.post('/auth', function(req, res) {
+  con.findUser(req.body.login)
+    .then(
+      resolve => {
+        bcrypt.compare(req.body.password, resolve.password, function(err, good) {
+          if (good == true) {
+            const payload = {
+              admin: resolve.admin 
+            };
+            let token = jwt.sign(payload, app.get('superSecret'), {
+              expiresIn: '2 days' // expires in 24 hours
+            });
+            // return the information including token as JSON
+            res.status(200).json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token
+            });
+          }
+          else if (good == false) {
+            res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+          }
+        })
 
+
+
+
+
+
+
+
+
+
+        // if (bcrypt.compareSync(req.body.password, resolve.password) ) {
+        //   res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+        // } else {
+        //   const payload = {
+        //     admin: resolve.admin 
+        //   };
+        //   let token = jwt.sign(payload, app.get('superSecret'), {
+        //     expiresIn: '2 days' // expires in 24 hours
+        //   });
+        //   // return the information including token as JSON
+        //   res.status(200).json({
+        //     success: true,
+        //     message: 'Enjoy your token!',
+        //     token: token
+        //   });
+        // }
+      },
+    reject => res.status(404).json({success: false, message: 'Authentication failed. User not found.'})
+    )
+})
 
 
 
