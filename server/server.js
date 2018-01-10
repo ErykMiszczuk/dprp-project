@@ -160,75 +160,14 @@ app.post('/auth', function(req, res) {
             res.json({ success: false, message: 'Authentication failed. Wrong password.' });
           }
         })
-
-
-
-
-
-
-
-
-
-
-        // if (bcrypt.compareSync(req.body.password, resolve.password) ) {
-        //   res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-        // } else {
-        //   const payload = {
-        //     admin: resolve.admin 
-        //   };
-        //   let token = jwt.sign(payload, app.get('superSecret'), {
-        //     expiresIn: '2 days' // expires in 24 hours
-        //   });
-        //   // return the information including token as JSON
-        //   res.status(200).json({
-        //     success: true,
-        //     message: 'Enjoy your token!',
-        //     token: token
-        //   });
-        // }
       },
     reject => res.status(404).json({success: false, message: 'Authentication failed. User not found.'})
     )
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// app.get('/', (req, res) => {
-//   res.sendFile(clientdir+'index.html')
-// })
-
-// app.get('/api/todos/:id', function(req, res) {
-//   res.status(200).send(todos.find(function(todo){
-//     return todo.id == req.params.id
-//   }))
-//   Todo.find({_id: req.params.id}, function(err, todos) {
-//     res.status(200).send(todos);
-//   })
-// })
-
-
-
-
-
-
-
-
-
-
+/**
+ * Starting server
+ */
 app.listen(port, () => {
   console.log(`App listening on ${port}`);
   console.log(clientdir);
