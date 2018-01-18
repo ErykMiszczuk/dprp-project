@@ -302,6 +302,9 @@ static findClient(client_name, nip, adress, city) {
 
 /**
  * CREATE TABLE based on models defined in DataModels
+ * If first argument is true, then the tables will be altered, if second
+ * argument will be true , then all tables will be droped and next 
+ * recreated from scratch 
  * 
  * @static
  * @param {boolean} alter 

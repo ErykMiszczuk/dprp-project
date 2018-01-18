@@ -6,7 +6,7 @@
     <meta name="application-name" content="WebApp">
     <meta name="author" content="Eryk Miszczuk">
     <link rel="stylesheet" href="/assets/css/style.css">
-    <script src="/assets/js/dataTransfer.js" charset="utf-8"></script>
+    <script src="/assets/js/login.js" charset="utf-8"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
   </head>
   <body>
@@ -14,16 +14,17 @@
       <h1 class="header__heading">CRM</h1>
       <nav class="header__nav">
         <ul class="nav_list">
+          <li class="nav_list_item"><span class="usr_login"></span></li>
           <li class="nav_list__item"><a class="nav_list__item__link" href="/index.html">Strona główna</a></li>
         </ul>
       </nav>
     </header>
     <main class="spa_content">
       <div class="spa_content__login_card">
-        <form action="/auth" method="post">
+        <form action="/auth" method="POST" class="spa_content__login_card__form">
           <label for="login__username"><p>Username</p><input type="text" name="login" id="login__username"></label>
           <label for="login__passwd"><p>Password</p><input type="password" name="password" id="login__passwd"></label>
-          <input type="submit" value="Wyślij">
+          <input type="button" value="Wyślij" id="login__submit">
         </form>
       </div>
     </main>
