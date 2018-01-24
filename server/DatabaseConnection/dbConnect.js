@@ -296,7 +296,7 @@ static findClient(client_name, nip, adress, city) {
         [Op.or]: [{firstName: first_name}, {lastName: last_name}, {birthDate: birth_date}, {login: usr_login}]
       }
     }).then(
-      user => user.set()
+      user => user.set('isDeleted', '1')
     )
   };
 

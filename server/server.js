@@ -43,7 +43,7 @@ app.post('/auth', function(req, res) {
         bcrypt.compare(req.body.password, resolve.password, function(err, good) {
           if (good == true) {
             const payload = {
-              admin: resolve.admin
+              admin: resolve.role
             };
             let token = jwt.sign(payload, app.get('superSecret'), {
               expiresIn: '2 days' // expires in 24 hours

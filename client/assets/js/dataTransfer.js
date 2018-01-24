@@ -13,7 +13,7 @@ function fetchAllUsers() {
     method: 'GET',
     headers: customHeader,
   }
-  fetch("/api/getusers", fetchIni)
+  fetch("/api/getusers/20", fetchIni)
   .then((res) => res.json())
   .then(
     data => {
@@ -219,7 +219,8 @@ function showAddUserModal() {
 }
 
 function showAddTradenoteModal() {
-  let select = `<select id="modal__select">`;
+  let selectClient = "";
+  selectClient += '<select id="modal__select">';
   let customHeader = new Headers();
   customHeader.append('x-access-token', window.localStorage.getItem('token'));
   let fetchIni = {
@@ -231,24 +232,44 @@ function showAddTradenoteModal() {
   .then(
     data => {
       data.forEach(client => {
-        select += `<option value="${client.id}">${client.clientName}</option>`;
+        selectClient += `<option value="${client.id}">${client.clientName}</option>`;
       });
-      select += `</select>`;
+      selectClient += `</select>`;
+      let html1 = `<div class="spa_content__add_modal">
+      <form class="spa_content__addtradenote_modal__form">
+        <label for="modal__tradenote"><p>Tradenote content</p><textarea name="username" id="modal__tradenote"></textarea></label>
+        <label for="modal__client"></label>`;
+      let html2 = `<input type="button" value="Wyślij" id="modal__submit">
+      </form>
+      </div>`;
+    
+      let resultArea = document.querySelector('.spa_content__result');
+      resultArea.innerHTML = html1 + selectClient + html2;
+      let addUserModalSubmitButton = document.querySelector('#modal__submit');
+      addUserModalSubmitButton.addEventListener("click", addTradenote);
     }
   )
-  let html1 = `<div class="spa_content__add_modal">
-  <form class="spa_content__addtradenote_modal__form">
-    <label for="modal__tradenote"><p>Tradenote content</p><textarea name="username" id="modal__tradenote"></textarea></label>
-    <label for="modal__client"><p>Lastname</p><input type="text" name="lastname" id="modal__lastname"></label>
-    `;
-  let html2 = `<input type="button" value="Wyślij" id="modal__submit">
-  </form>
-  </div>`;
+}
 
-  let resultArea = document.querySelector('.spa_content__result');
-  resultArea.innerHTML = html1 + select + html2;
-  let addUserModalSubmitButton = document.querySelector('#modal__submit');
-  addUserModalSubmitButton.addEventListener("click", addUser);
+function addTradenote() {
+  let tradenoteValue = document.getElementById('modal__tradenote').value;
+  // let selectValue = document.querySelector('#modal__select').value;
+  let customHeader = new Headers();
+  customHeader.append('Content-Type', 'application/x-www-form-urlencoded');
+  customHeader.append('x-access-token', window.localStorage.getItem('token'));
+  let body = `note=${tradenoteValue}`;
+  let fetchIni = {
+    method: 'POST',
+    headers: customHeader,
+    body: body
+  }
+  
+  fetch('/api/addnote', fetchIni).then(
+    res => {
+      console.log('New note added');
+      fetchAllTradenotes();
+    }
+  )
 }
 
 function addUser() {
@@ -270,7 +291,6 @@ function addUser() {
   
   fetch('/api/adduser', fetchIni).then(
     res => {
-      console.log(res);
       console.log('New user added');
       fetchAllUsers();
     }
